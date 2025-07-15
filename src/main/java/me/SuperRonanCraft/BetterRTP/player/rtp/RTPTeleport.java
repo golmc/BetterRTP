@@ -8,6 +8,7 @@ import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
@@ -107,13 +108,21 @@ public class RTPTeleport {
     //Effects
 
     public void afterTeleport(Player p, Location loc, WorldPlayer wPlayer, int attempts, Location oldLoc, RTP_TYPE type) {
+        // custom GoL code start
+        ConsoleCommandSender console = Bukkit.getConsoleSender();
+        String playerName = p.getName();
+        if (!p.hasPermission("open_world")) {
+            Bukkit.dispatchCommand(console, "lp user " + playerName + " permission set open_world true");
+        }
+        Bukkit.dispatchCommand(console, "interface update-text-bar " + playerName);
+        // custom GoL code end
         //Only a successful rtp should run this OR '/rtp test'
         effects.getSounds().playTeleport(p);
         effects.getParticles().display(p);
         effects.getPotions().giveEffects(p);
         effects.getTitles().showTitle(RTPEffect_Titles.RTP_TITLE_TYPE.TELEPORT, p, loc, attempts, 0);
         if (effects.getTitles().sendMsg(RTPEffect_Titles.RTP_TITLE_TYPE.TELEPORT))
-            sendSuccessMsg(p, p.getName(), loc, wPlayer, true, attempts);
+            sendSuccessMsg(p, playerName, loc, wPlayer, true, attempts);
         getPl().getServer().getPluginManager().callEvent(new RTP_TeleportPostEvent(p, loc, oldLoc, wPlayer, type));
     }
 
