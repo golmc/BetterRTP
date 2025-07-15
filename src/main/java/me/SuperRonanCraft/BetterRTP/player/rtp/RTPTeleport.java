@@ -108,13 +108,15 @@ public class RTPTeleport {
     //Effects
 
     public void afterTeleport(Player p, Location loc, WorldPlayer wPlayer, int attempts, Location oldLoc, RTP_TYPE type) {
-        // custom GoL code start
-        ConsoleCommandSender console = Bukkit.getConsoleSender();
         String playerName = p.getName();
-        if (!p.hasPermission("open_world")) {
-            Bukkit.dispatchCommand(console, "lp user " + playerName + " permission set open_world true");
-        }
-        Bukkit.dispatchCommand(console, "interface update-text-bar " + playerName);
+        // custom GoL code start
+        Bukkit.getGlobalRegionScheduler().run(BetterRTP.getInstance(), (task) -> {
+            ConsoleCommandSender console = Bukkit.getConsoleSender();
+            if (!p.hasPermission("open_world")) {
+                Bukkit.dispatchCommand(console, "lp user " + playerName + " permission set open_world true");
+            }
+            Bukkit.dispatchCommand(console, "interface update-text-bar " + playerName);
+        });
         // custom GoL code end
         //Only a successful rtp should run this OR '/rtp test'
         effects.getSounds().playTeleport(p);
