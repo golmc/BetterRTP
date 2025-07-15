@@ -1,10 +1,16 @@
 package me.SuperRonanCraft.BetterRTP.player.rtp;
 
+import java.time.Instant;
 import java.util.Arrays;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.NamespacedKey;
+import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import io.papermc.lib.PaperLib;
@@ -51,7 +57,34 @@ public class RTPTeleport {
         try {
             RTP_TeleportEvent event = new RTP_TeleportEvent(p, location, wPlayer.getWorldtype());
             getPl().getServer().getPluginManager().callEvent(event);
-            Location loc = event.getLocation();
+            // custom GoL code start
+            World world = location.getWorld();
+            if (world == null) {
+                return;
+            }
+            String worldName = world.getName();
+            // get keys
+            NamespacedKey timestampKey = NamespacedKey.minecraft("checkpoint_timestamp" + worldName);
+            NamespacedKey xyzKey = NamespacedKey.minecraft("checkpoint_xyz" + worldName);
+            // get data from persistent data container
+            PersistentDataContainer pdc = p.getPersistentDataContainer();
+            Long oldTimestamp = pdc.get(timestampKey, PersistentDataType.LONG);
+            int[] xyz = pdc.get(xyzKey, PersistentDataType.INTEGER_ARRAY);
+            // setup variables
+            long timestamp = Instant.now().getEpochSecond();
+            Location loc;
+            // check if the old location is valid and not expired (less than 24 hours old)
+            if (xyz != null && xyz.length == 3 && oldTimestamp != null && timestamp - oldTimestamp < 86400) {
+                // teleport to old location
+                loc = new Location(world, xyz[0], xyz[1], xyz[2]);
+            } else {
+                // teleport to new location
+                loc = event.getLocation();
+                // write down new timestamp and coordinates
+                pdc.set(timestampKey, PersistentDataType.LONG, timestamp);
+                pdc.set(xyzKey, PersistentDataType.INTEGER_ARRAY, new int[] {loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()});
+            }
+            // custom GoL code end
             PaperLib.teleportAsync(p, loc).thenRun(new BukkitRunnable() { //Async teleport
                 @Override
                 public void run() {
