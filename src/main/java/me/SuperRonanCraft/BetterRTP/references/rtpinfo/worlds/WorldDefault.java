@@ -76,6 +76,7 @@ public class WorldDefault implements RTPWorld {
         if (BetterRTP.getInstance().getSettings().isDebug()) {
             Logger log = BetterRTP.getInstance().getLogger();
             log.info("- UseWorldBorder: " + this.useWorldborder);
+            log.info("- RTPOnDeath: " + this.RTPOnDeath);
             log.info("- CenterX: " + this.centerX);
             log.info("- CenterZ: " + this.centerZ);
             log.info("- MaxRadius: " + this.maxRad);
@@ -151,7 +152,8 @@ public class WorldDefault implements RTPWorld {
         return BetterRTP.getInstance().getCooldowns().getDefaultCooldownTime();
     }
 
-    @Override public boolean getRTPOnDeath() {
+    @Override
+    public boolean getRTPOnDeath() {
         return RTPOnDeath;
     }
 }

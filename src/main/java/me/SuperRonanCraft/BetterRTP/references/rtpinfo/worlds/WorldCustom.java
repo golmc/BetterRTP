@@ -45,6 +45,12 @@ public class WorldCustom implements RTPWorld, RTPWorld_Defaulted {
                         BetterRTP.debug("- UseWorldBorder: " + this.useWorldborder);
                     }
                 }
+                if (test.get("RTPOnDeath") != null) {
+                    if (test.get("RTPOnDeath").getClass() == Boolean.class) {
+                        RTPOnDeath = Boolean.parseBoolean(test.get("RTPOnDeath").toString());
+                        BetterRTP.debug("- RTPOnDeath: " + this.RTPOnDeath);
+                    }
+                }
                 if (test.get("CenterX") != null) {
                     if (test.get("CenterX").getClass() == Integer.class) {
                         centerX = Integer.parseInt((test.get("CenterX")).toString());
@@ -203,7 +209,8 @@ public class WorldCustom implements RTPWorld, RTPWorld_Defaulted {
         return cooldown;
     }
 
-    @Override public boolean getRTPOnDeath() {
+    @Override
+    public boolean getRTPOnDeath() {
         return RTPOnDeath;
     }
 
@@ -268,7 +275,8 @@ public class WorldCustom implements RTPWorld, RTPWorld_Defaulted {
         this.cooldown = value;
     }
 
-    @Override public void setRTPOnDeath(boolean bool) {
-        RTPOnDeath = bool;
+    @Override
+    public void setRTPOnDeath(boolean value) {
+        this.RTPOnDeath = value;
     }
 }
