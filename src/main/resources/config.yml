@@ -33,6 +33,8 @@ Settings:
     Pueblos: false
     ## Respect SaberFactions areas (https://www.spigotmc.org/resources/saberfactions.69771/) (Added in 3.4.5)
     SaberFactions: false
+    ## Respect HuskClaims areas (https://www.spigotmc.org/resources/huskclaims-1-17-1-21-modern-golden-shovel-land-claiming-fully-cross-server-compatible.114467/) (Added in 1.5.2)
+    HuskClaims: false
     ## Respect HuskTowns areas (https://www.spigotmc.org/resources/husktowns.92672/) (Added in 3.4.5)
     HuskTowns: false
     ## Respect FactionsBridge compatible claims (https://www.spigotmc.org/resources/factionsbridge.89716/) (Added in 3.6.9)
