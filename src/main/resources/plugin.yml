@@ -25,6 +25,7 @@ softdepend:
     - Multiverse-Core #Forcing Multiverse to load BEFORE BetterRTP
     - Essentials #adds `/back` support
     - PlaceholderAPI
+    - HuskClaims #fixed condition race which breaks hooking
 api-version: '1.13'
 
 commands:
